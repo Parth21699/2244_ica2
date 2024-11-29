@@ -17,13 +17,13 @@ pipeline {
             steps {
                 sh 'docker build -t mywebsite .'
                 sh 'docker stop mywebsite || true && docker rm mywebsite || true'
-                sh 'docker run --name mywebsite -d -p 8081:80 mywebsite'
+                sh 'docker run --name mywebsite -d -p 8080:80 mywebsite'
             }
         }
 
          stage('Test') {
             steps {
-                sh 'curl -I localhost:8081'
+                sh 'curl -I localhost:8080'
             }
         }
         stage('Tag and Push') {
