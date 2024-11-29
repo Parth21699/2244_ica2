@@ -18,12 +18,12 @@ pipeline {
                 docker rm ${CONTAINER_NAME} || true
                 '''
                 // Run the container
-                sh 'docker run -d --name ${CONTAINER_NAME} -p 8082:80 ${DOCKER_REPO}:latest'
+                sh 'docker run -d --name ${CONTAINER_NAME} -p 8083:80 ${DOCKER_REPO}:latest'
             }
         }
         stage('Test') {
             steps {
-                sh 'curl -I http://98.81.11.241:8082'
+                sh 'curl -I http://98.81.11.241:8083'
             }
         }
     }
