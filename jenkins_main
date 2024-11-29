@@ -2,28 +2,22 @@ pipeline {
     agent any
     environment {
         DOCKER_REPO = "parth21699/2244_ica2"
-        CONTAINER_NAME = "ica2_container"
     }
     stages {
         stage('Pull Docker Image') {
             steps {
-                sh 'docker pull ${DOCKER_REPO}:latest'
+                sh 'docker pull parth21699/2244_ica2:latest'
             }
         }
         stage('Run Container') {
             steps {
-                // Stop and remove the old container by its name
-                sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
-                '''
-                // Run the new container with a specific name
-                sh 'docker run -d --name ${CONTAINER_NAME} -p 8082:80 ${DOCKER_REPO}:latest'
+      
+                sh 'docker run -d -p 8082:80 parth21699/2244_ica2:latest'
             }
         }
         stage('Test') {
             steps {
-                sh 'curl -I localhost:8082'
+                sh 'curl -I 98.81.11.241:8082'
             }
         }
     }
