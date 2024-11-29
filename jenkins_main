@@ -27,7 +27,8 @@ pipeline {
         }
         stage('Run Container') {
             steps {
-                 sh 'docker stop parth21699/2244_ica2:latest || true && docker rm parth21699/2244_ica2:latest || true'
+                sh 'docker stop parth21699/2244_ica2 || true && docker rm parth21699/2244_ica2 || true' 
+                
                 sh 'docker run -d -p 8082:80 parth21699/2244_ica2:latest'
             }
         }
