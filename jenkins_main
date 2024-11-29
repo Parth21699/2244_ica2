@@ -12,12 +12,12 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh 'docker stop parth21699/2244_ica2:latest || true && docker rm parth21699/2244_ica2:latest || true'
-                sh 'docker run -d -p 8082:80 parth21699/2244_ica2:latest'
+                sh 'docker run -d -p 8086:80 parth21699/2244_ica2:latest'
             }
         }
         stage('Test') {
             steps {
-                sh 'curl -I localhost:8082'
+                sh 'curl -I localhost:8086'
             }
         }
     }
