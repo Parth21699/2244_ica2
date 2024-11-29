@@ -2,22 +2,6 @@ pipeline {
     agent any
     environment {
         DOCKER_REPO = "parth21699/2244_ica2"
-        CONTAINER_NAME = "ica2_container"
-    }
-    stages {
-        stage('Pull Docker Image') {
-            steps {
-                sh 'docker pull ${DOCKER_REPO}:latest'
-            }
-        }
-        stage('Run Container') {
-            steps {
-                // Stop and remove any existing container with the same name
-                sh '''
-                docker stop ${CONTAINER_NAME} || pipeline {
-    agent any
-    environment {
-        DOCKER_REPO = "parth21699/2244_ica2"
     }
     stages {
         stage('Pull Docker Image') {
@@ -27,27 +11,13 @@ pipeline {
         }
         stage('Run Container') {
             steps {
-                sh 'docker stop parth21699/2244_ica2 || true && docker rm parth21699/2244_ica2 || true' 
-                
-                sh 'docker run -d -p 8082:80 parth21699/2244_ica2:latest'
+                sh 'docker stop parth21699/2244_ica2:latest || true && docker rm parth21699/2244_ica2:latest || true'
+                sh 'docker run -d -p 8089:80 parth21699/2244_ica2:latest'
             }
         }
         stage('Test') {
             steps {
-                sh 'curl -I localhost:8084'
-            }
-        }
-    }
-}true
-                docker rm ${CONTAINER_NAME} || true
-                '''
-                // Run the container
-                sh 'docker run -d --name ${CONTAINER_NAME} -p 8084:80 ${DOCKER_REPO}:latest'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'curl -I http://98.81.11.241:8084'
+                sh 'curl -I localhost:8089'
             }
         }
     }
