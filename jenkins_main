@@ -14,16 +14,39 @@ pipeline {
             steps {
                 // Stop and remove any existing container with the same name
                 sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
-                '''
-                // Run the container
-                sh 'docker run -d --name ${CONTAINER_NAME} -p 8083:80 ${DOCKER_REPO}:latest'
+                docker stop ${CONTAINER_NAME} || pipeline {
+    agent any
+    environment {
+        DOCKER_REPO = "parth21699/2244_ica2"
+    }
+    stages {
+        stage('Pull Docker Image') {
+            steps {
+                sh 'docker pull parth21699/2244_ica2:latest'
+            }
+        }
+        stage('Run Container') {
+            steps {
+                 sh 'docker stop parth21699/2244_ica2:latest || true && docker rm parth21699/2244_ica2:latest || true'
+                sh 'docker run -d -p 8082:80 parth21699/2244_ica2:latest'
             }
         }
         stage('Test') {
             steps {
-                sh 'curl -I http://98.81.11.241:8083'
+                sh 'curl -I localhost:8082'
+            }
+        }
+    }
+}true
+                docker rm ${CONTAINER_NAME} || true
+                '''
+                // Run the container
+                sh 'docker run -d --name ${CONTAINER_NAME} -p 8084:80 ${DOCKER_REPO}:latest'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'curl -I http://98.81.11.241:8084'
             }
         }
     }
