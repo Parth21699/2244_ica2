@@ -2,35 +2,23 @@ pipeline {
     agent any
     environment {
         DOCKER_REPO = "parth21699/2244_ica2"
-        CONTAINER_NAME = "my_app_container"
     }
     stages {
         stage('Pull Docker Image') {
             steps {
-                sh 'docker pull ${DOCKER_REPO}:latest'
+                sh 'docker pull parth21699/2244_ica2:latest'
             }
         }
         stage('Run Container') {
             steps {
-                sh '''
-                    docker stop ${bold_gagarin} || true
-                    docker rm ${bold_gagarin} || true
-                    docker run -d --name ${bold_gagarin} -p 8089:80 ${DOCKER_REPO}:latest
-                '''
+                sh 'docker stop parth21699/2244_ica2:latest || true && docker rm parth21699/2244_ica2:latest || true'
+                sh 'docker run -d -p 8089:80 parth21699/2244_ica2:latest'
             }
         }
         stage('Test') {
             steps {
                 sh 'curl -I localhost:8089'
             }
-        }
-    }
-    post {
-        always {
-            sh '''
-                docker stop ${bold_gagarin} || true
-                docker rm ${bold_gagarin} || true
-            '''
         }
     }
 }
