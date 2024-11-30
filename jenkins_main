@@ -13,9 +13,9 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                    docker run -d --name ${CONTAINER_NAME} -p 8089:80 ${DOCKER_REPO}:latest
+                    docker stop ${bold_gagarin} || true
+                    docker rm ${bold_gagarin} || true
+                    docker run -d --name ${bold_gagarin} -p 8089:80 ${DOCKER_REPO}:latest
                 '''
             }
         }
@@ -28,8 +28,8 @@ pipeline {
     post {
         always {
             sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
+                docker stop ${bold_gagarin} || true
+                docker rm ${bold_gagarin} || true
             '''
         }
     }
