@@ -2,24 +2,49 @@ pipeline {
     agent any
     environment {
         DOCKER_REPO = "parth21699/2244_ica2"
+        CONTAINER_NAME = "bold_gagarin"
+        PORT = "8089" // Change this if you use a different port
     }
     stages {
         stage('Pull Docker Image') {
             steps {
-                sh 'docker pull parth21699/2244_ica2:latest'
+                sh 'docker pull ${DOCKER_REPO}:latest'
+            }
+        }
+        stage('Free Port') {
+            steps {
+                sh '''
+                    # Check if the port is in use
+                    if lsof -i :${PORT}; then
+                        echo "Port ${PORT} is in use. Killing process..."
+                        lsof -i :${PORT} | awk 'NR>1 {print $2}' | xargs kill -9 || true
+                    else
+                        echo "Port ${PORT} is not in use."
+                    fi
+                '''
             }
         }
         stage('Run Container') {
             steps {
-                sh 'docker stop parth21699/2244_ica2:latest || true && docker rm parth21699/2244_ica2:latest || true'
-                sh 'docker run -d -p 8089:80 parth21699/2244_ica2:latest'
-
+                sh '''
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+                    docker run -d --name ${CONTAINER_NAME} -p ${PORT}:80 ${DOCKER_REPO}:latest
+                '''
             }
         }
         stage('Test') {
             steps {
-                sh 'curl -I localhost:8089'
+                sh 'curl -I localhost:${PORT}'
             }
+        }
+    }
+    post {
+        always {
+            sh '''
+                docker stop ${CONTAINER_NAME} || true
+                docker rm ${CONTAINER_NAME} || true
+            '''
         }
     }
 }
